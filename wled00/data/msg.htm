@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta content='width=device-width' name='viewport'>
+	<title>WLED Message</title>
+	<script>
+		function B() { window.history.back() };
+			const ns = "/castletek/v1";
+			const path = window.location.pathname;
+			const authenticated = "/api/castletek/v1";
+			const candidateIndex = path.indexOf(ns);
+			const prefix = candidateIndex >= 0 ? path.slice(0, candidateIndex) : "";
+			const isAuthenticated = path === authenticated || path.startsWith(authenticated + "/") || prefix === "/api" || prefix.endsWith("/api");
+			const nsEnd = candidateIndex + ns.length;
+			const nsIndex = candidateIndex >= 0 && !isAuthenticated && (nsEnd === path.length || path.charAt(nsEnd) === "/") ? candidateIndex : -1;
+		if (nsIndex >= 0) document.title = "CastleTek Message";
+		function RS() {
+			window.location = nsIndex < 0 ? "../settings" : window.location.pathname.slice(0, nsIndex) + ns + "/settings";
+		}
+		function RP() {
+			top.location.href = nsIndex < 0 ? "../" : window.location.pathname.slice(0, nsIndex) + ns + "/";
+		}
+	</script>
+	<style>
+		@import url("style.css");
+	</style>
+</head>
+
+<body>
+	<h2>Sample Message.</h2>
+	Sample Detail.
+</body>
+
+</html>

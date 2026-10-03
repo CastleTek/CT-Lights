@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "environment": "castletek_compat_digquad_v2_v3_wifi",
+  "target": "CastleTek_WLED_Compat_DigQuad_v2v3",
+  "version": "16.1.0+1.61",
+  "build": 2605011
+}

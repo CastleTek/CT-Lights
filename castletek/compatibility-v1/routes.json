@@ -1,0 +1,839 @@
+{
+  "schemaVersion": 2,
+  "profile": "castleTekWLEDCompatibilityV1",
+  "engine": "WLED 0.16.0",
+  "transportSecurity": "trusted-lan-cleartext-no-application-authentication",
+  "defaultFriendlyName": "CastleTek Controller",
+  "basePath": "/castletek/v1",
+  "webSocketPath": "/castletek/v1/ws",
+  "discovery": {
+    "bonjourType": "_castletek-wled._tcp",
+    "hostPrefix": "castletek-",
+    "port": 80,
+    "txt": {
+      "profile": "compat-v1",
+      "base": "/castletek/v1",
+      "api": "wled-json-0.16",
+      "auth": "none"
+    }
+  },
+  "routeFamilies": [
+    {
+      "name": "web-control",
+      "legacy": [
+        "/"
+      ],
+      "namespaced": [
+        "/castletek/v1/",
+        "/castletek/v1/control"
+      ]
+    },
+    {
+      "name": "json",
+      "legacy": [
+        "/json",
+        "/json/state",
+        "/json/info",
+        "/json/si",
+        "/json/nodes",
+        "/json/effects",
+        "/json/eff",
+        "/json/fxdata",
+        "/json/palettes",
+        "/json/pal",
+        "/json/palx",
+        "/json/net",
+        "/json/cfg",
+        "/json/pins",
+        "/json/live"
+      ],
+      "prefix": "/castletek/v1"
+    },
+    {
+      "name": "settings",
+      "legacy": [
+        "/settings",
+        "/settings/wifi",
+        "/settings/leds",
+        "/settings/sync",
+        "/settings/time",
+        "/settings/sec",
+        "/settings/dmx",
+        "/settings/lock",
+        "/settings/s.js"
+      ],
+      "prefix": "/castletek/v1",
+      "methodScoped": [
+        {
+          "legacy": "/settings/ui",
+          "namespaced": "/castletek/v1/settings/ui",
+          "allowedMethods": [
+            "POST"
+          ],
+          "blockedMethods": [
+            "GET"
+          ],
+          "reason": "The native app and CastleTek controller shell retain the WLED-shaped rename mutation; the browser settings page is removed."
+        },
+        {
+          "legacy": "/settings/pins",
+          "namespaced": "/castletek/v1/settings/pins",
+          "allowedMethods": [
+            "POST"
+          ],
+          "blockedMethods": [
+            "GET"
+          ],
+          "reason": "The native app retains PIN unlock for existing security settings; the Pin Info browser page is removed."
+        }
+      ]
+    },
+    {
+      "name": "update-and-restore",
+      "legacy": [
+        "/upload",
+        "/presets.json",
+        "/cfg.json",
+        "/reset"
+      ],
+      "prefix": "/castletek/v1",
+      "methodScoped": [
+        {
+          "legacy": "/update",
+          "namespaced": "/castletek/v1/update",
+          "allowedMethods": [
+            "POST"
+          ],
+          "blockedMethods": [
+            "GET"
+          ],
+          "reason": "Compatibility update policy 1 requires a fixed app key and complete validated image; the browser updater is unavailable."
+        }
+      ]
+    },
+    {
+      "name": "web-utilities",
+      "legacy": [
+        "/edit",
+        "/welcome",
+        "/version",
+        "/uptime",
+        "/freeheap",
+        "/liveview",
+        "/liveview2D",
+        "/cpal.htm",
+        "/pixart.htm",
+        "/pxmagic.htm",
+        "/pixelforge.htm",
+        "/dmxmap",
+        "/teapot",
+        "/common.js",
+        "/iro.js",
+        "/omggif.js",
+        "/style.css",
+        "/skin.css",
+        "/favicon.svg",
+        "/castletek-branding.css",
+        "/castletek-branding.js",
+        "/castletek-logo.png"
+      ],
+      "prefix": "/castletek/v1"
+    },
+    {
+      "name": "legacy-http-api",
+      "legacyPrefix": "/win",
+      "namespacedPrefix": "/castletek/v1/win"
+    },
+    {
+      "name": "sync-settings",
+      "namespaced": [
+        "/castletek/v1/sync"
+      ],
+      "allowedMethods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "name": "default-layout",
+      "namespaced": [
+        "/castletek/v1/json/default-layout"
+      ],
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "name": "preset-name",
+      "namespaced": [
+        "/castletek/v1/json/preset-name"
+      ],
+      "methods": [
+        "POST"
+      ]
+    }
+  ],
+  "disabledSettingsSurfaces": [
+    {
+      "path": "/castletek/v1/settings/ui",
+      "methods": [
+        "GET"
+      ],
+      "status": 404
+    },
+    {
+      "path": "/castletek/v1/settings/2D",
+      "caseInsensitivePath": true,
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "status": 404
+    },
+    {
+      "path": "/castletek/v1/settings/um",
+      "caseInsensitivePath": true,
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "status": 404
+    },
+    {
+      "path": "/castletek/v1/u",
+      "caseInsensitivePath": true,
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "status": 404
+    },
+    {
+      "path": "/castletek/v1/settings/pins",
+      "methods": [
+        "GET"
+      ],
+      "status": 404
+    },
+    {
+      "path": "/castletek/v1/settings/s.js",
+      "methods": [
+        "GET"
+      ],
+      "blockedQueryValues": {
+        "p": [
+          3,
+          8,
+          10,
+          11
+        ]
+      },
+      "status": 404
+    }
+  ],
+  "schedulePolicy": {
+    "schema": 1,
+    "holidayRules": 1,
+    "maxSchedules": 32,
+    "maxEvents": 64,
+    "info": {
+      "path": "/castletek/v1/json/info",
+      "object": "castletek.schedules",
+      "fields": [
+        "schema",
+        "holidayRules",
+        "available",
+        "revision",
+        "persistedRevision",
+        "saveError",
+        "maxSchedules",
+        "maxEvents",
+        "legacyTimers"
+      ]
+    },
+    "metadata": {
+      "path": "/castletek/v1/settings/s.js?p=5",
+      "object": "d.ct_schedules",
+      "includesItems": true
+    },
+    "storage": "timers.ct",
+    "form": {
+      "path": "/castletek/v1/settings/time",
+      "items": "CTSC",
+      "expectedRevision": "CTSR",
+      "omission": "preserve-managed-schedules",
+      "rejection": "before-unrelated-form-mutation"
+    },
+    "nativeTimers": "retained-separately-with-shared-event-capacity",
+    "holidayCalendar": "controller-local-annual-rules-no-phone-background-task",
+    "holidayTiming": [
+      "custom-daily-start-stop",
+      "sunset-to-next-sunrise"
+    ],
+    "stopPresetZero": "explicit-off",
+    "unknownInstalledSchema": "preserve-without-execution-or-editing",
+    "rawBackupRestoreRevision": "installed-backup-revision-after-restart",
+    "persistence": "capacity-checked-temporary-file-then-rename",
+    "scheduleFields": [
+      "id",
+      "name",
+      "enabled",
+      "preset",
+      "kind",
+      "start",
+      "stop",
+      "stopPreset",
+      "weekdays",
+      "from",
+      "to",
+      "offset",
+      "holiday",
+      "observed",
+      "before",
+      "after",
+      "solarWindow"
+    ],
+    "browserNativeEditor": "removed-hidden-complete-form-values-preserve-native-timers"
+  },
+  "wifiScan": {
+    "scope": "Compatibility-v1-ESP32",
+    "path": "/castletek/v1/json/net",
+    "method": "GET",
+    "response": {
+      "networks": "existing-WLED-shaped-array",
+      "scan": {
+        "schema": 1,
+        "state": [
+          "running",
+          "complete",
+          "failed"
+        ]
+      }
+    },
+    "stateRules": {
+      "running": "empty-array-poll-without-refresh",
+      "complete": "terminal-array-may-be-empty",
+      "failed": "empty-array-not-a-no-networks-result"
+    },
+    "refreshQuery": "refresh=1",
+    "refreshWhileRunning": "join-current-scan-never-restart",
+    "defaultRequest": "start-initial-scan-poll-running-or-reuse-terminal-result",
+    "terminalCacheSeconds": 30,
+    "scanTimeoutSeconds": 10,
+    "timeoutRecovery": "stop-scan-and-await-completion-callback-unless-driver-is-already-stopped-or-uninitialized",
+    "rescanAfterResults": false,
+    "legacyResponse": "missing-scan-object-retains-WLED-rows-empty-array-status-is-ambiguous"
+  },
+  "hardwarePolicy": {
+    "version": 2,
+    "infoMetadata": {
+      "path": "/castletek/v1/json/info",
+      "object": "castletek.hardware",
+      "fields": [
+        "policy",
+        "ledPins",
+        "buttonsEditable",
+        "irEditable",
+        "uiEditable",
+        "usermodsEditable",
+        "wifiNetworksAddable",
+        "apEditable",
+        "force80211gEditable",
+        "blockedBuses",
+        "backupFailed",
+        "dmxSupported",
+        "outputsFixed",
+        "networkOutputsAddable",
+        "activeOutputRanges"
+      ]
+    },
+    "ledSettingsMetadata": {
+      "path": "/castletek/v1/settings/s.js?p=2",
+      "fields": [
+        "d.ct_hw_policy",
+        "d.ct_led_pins",
+        "d.ct_blocked_buses",
+        "d.ct_cfg_backup_failed",
+        "d.ct_dmx_supported",
+        "d.Sf.EN<n>.checked",
+        "d.ct_output_count",
+        "d.ct_active_output_ranges"
+      ]
+    },
+    "fixedPinProfiles": {
+      "castletek_compat_esp32dev": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "castletek_compat_digquad_v2_v3_wifi": [
+        16,
+        3,
+        1,
+        4
+      ]
+    },
+    "connectorIdentity": "fixed-board-order-one-slot-per-pin",
+    "physicalPinChanges": "reject-any-slot-count-order-or-pin-change-before-mutation",
+    "nonGPIOPinArrays": [],
+    "buttonsEditable": false,
+    "irEditable": false,
+    "uiEditable": false,
+    "usermodsEditable": false,
+    "wifiNetworksAddable": false,
+    "apEditable": false,
+    "force80211gEditable": false,
+    "wifiProfilePolicy": "reject-additions-preserve-installed-slots-and-existing-removal-semantics",
+    "wifiSaveBehavior": "WLED-save-and-connect-no-added-reboot",
+    "accessPointDefaults": {
+      "ssid": "compiled-WLED_AP_SSID",
+      "password": "compiled-WLED_AP_PASS",
+      "channel": 6,
+      "hidden": false,
+      "behavior": 0
+    },
+    "force80211g": false,
+    "securityUploadTargets": [
+      "/wsec.json",
+      "/bkp.wsec.json"
+    ],
+    "securityUploadValidation": "fixed-AP-defaults-and-no-added-station-slots-before-rename",
+    "usermodConfiguration": "unchanged-installed-um-and-shared-I2C-SPI-pins",
+    "usermodState": "AudioReactive-enabled-frozen-live-inputLevel-retained",
+    "buttonDefaults": "compiled-BTNPIN-BTNTYPE",
+    "rename": "canonical-POST-with-unchanged-SU",
+    "configurationUpload": "stage-one-complete-file-validate-then-rename",
+    "configurationUploadTargets": [
+      "/cfg.json",
+      "/bkp.cfg.json"
+    ],
+    "configurationUploadRestartTarget": "/cfg.json",
+    "legacyBackupRecovery": "upstream-startup-recovery-followed-by-boot-hardware-policy",
+    "incompatibleSavedOutputs": "inactive-without-remapping-after-preoutputs-backup",
+    "recoveryCopy": "/cfg.prepolicy.json",
+    "recoveryCopyFailure": "preserve-original-block-settings-config-and-restore-until-storage-recovery-and-restart",
+    "outputsFixed": true,
+    "networkOutputsAddable": false,
+    "outputSchema": {
+      "configMarker": "hw.led.ct-policy=2",
+      "rows": "hw.led.ins",
+      "enabled": "required-JSON-boolean",
+      "formEnabled": "EN<base36-index>=1-when-enabled-otherwise-omitted",
+      "disabled": "retained-settings-zero-active-length-no-driver-except-black-only-off-refresh",
+      "segments": "enabled-bus-auto-segments-and-uncovered-custom-range-repair",
+      "types": "one-pin-physical-only",
+      "formMarker": "CTOP=2",
+      "freshDefaults": {
+        "enabled": [
+          true,
+          false,
+          false,
+          false
+        ],
+        "length": [
+          10,
+          1,
+          1,
+          1
+        ],
+        "start": [
+          0,
+          10,
+          10,
+          10
+        ],
+        "profileScope": "prefix-matching-compiled-connector-count"
+      },
+      "activeOutputRanges": true,
+      "lastLEDPresentation": "inclusive-zero-based-converted-to-native-start-plus-length",
+      "enableStartSuggestion": "maximum-enabled-end-or-zero"
+    },
+    "outputMigrationRecoveryCopy": "/cfg.preoutputs.json",
+    "serialBaud": 115200,
+    "serialBaudEditable": false,
+    "serialBaudMigration": "normalize-saved-nondefault-rate-at-boot-and-persist"
+  },
+  "retiredBasePaths": [
+    {
+      "basePath": "/castletek-wled/v1",
+      "behavior": "404-no-redirect"
+    }
+  ],
+  "forbiddenLegacyHTTPPrefixes": [
+    "/json",
+    "/settings",
+    "/update",
+    "/updatebootloader",
+    "/upload",
+    "/presets.json",
+    "/cfg.json",
+    "/reset",
+    "/edit",
+    "/liveview",
+    "/cpal.htm",
+    "/win",
+    "/ws"
+  ],
+  "reservedAuthenticatedCastleTekSurfaces": {
+    "bonjourType": "_castletek._tcp",
+    "apiBase": "/api/castletek/v1"
+  },
+  "unchangedNonHTTPProtocols": [
+    "DDP",
+    "WLED UDP sync",
+    "serial protocols"
+  ],
+  "disabledUpdateSurfaces": [
+    {
+      "path": "/castletek/v1/update",
+      "methods": [
+        "GET"
+      ],
+      "status": 404
+    },
+    {
+      "path": "/castletek/v1/updatebootloader",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "status": 404
+    }
+  ],
+  "updatePolicy": {
+    "policy": 1,
+    "purpose": "casual-change-and-wrong-file-guard-not-publisher-authentication",
+    "tls": false,
+    "pairing": false,
+    "signedImages": false,
+    "info": {
+      "path": "/castletek/v1/json/info",
+      "object": "castletek.update",
+      "fields": [
+        "policy",
+        "available",
+        "maxSize",
+        "keyRequired",
+        "browser",
+        "format",
+        "imageSHA256"
+      ]
+    },
+    "upload": {
+      "path": "/castletek/v1/update",
+      "method": "POST",
+      "headers": [
+        "X-CastleTek-Update-Key",
+        "X-CastleTek-Firmware-Size",
+        "X-CastleTek-Firmware-SHA256"
+      ],
+      "source": "local-controller-LAN-or-setup-AP",
+      "nativeOTALock": "independent-no-unlock-or-relock",
+      "concurrency": 1,
+      "activation": "only-after-complete-request-size-sha256-image-and-hardware-validation",
+      "failure": "abort-without-activation-no-mutation-retry",
+      "contentType": "application/octet-stream",
+      "body": "one-raw-ESP32-application",
+      "multipart": "rejected",
+      "transferDeadlineSeconds": 300,
+      "idleTimeoutSeconds": 15
+    },
+    "package": {
+      "extension": ".ctfw",
+      "format": "ctfw-1",
+      "schema": 1,
+      "product": "CastleTek WLED Compatibility v1",
+      "fields": [
+        "schema",
+        "product",
+        "target",
+        "version",
+        "build",
+        "size",
+        "sha256",
+        "firmware"
+      ],
+      "firmwareEncoding": "base64-raw-ESP32-application",
+      "sha256": "whole-raw-firmware-bytes",
+      "build": "release-label-not-embedded-image-authentication"
+    },
+    "imagePolicyMarker": {
+      "metadataByteOffset": 111,
+      "magic": 1129600336,
+      "policy": 1
+    },
+    "automaticRecovery": "retained",
+    "arduinoOTA": false,
+    "manualRollback": false
+  },
+  "syncPolicy": {
+    "schema": 4,
+    "endpoint": "/castletek/v1/sync",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "info": {
+      "path": "/castletek/v1/json/info",
+      "object": "castletek.sync",
+      "fields": [
+        "schema",
+        "available",
+        "espNowAvailable",
+        "disabledFeatures"
+      ]
+    },
+    "readFields": [
+      "schema",
+      "mac",
+      "apMac",
+      "activeMac",
+      "channel",
+      "wifiConnected",
+      "radioState",
+      "espNowAvailable",
+      "settings",
+      "persisted",
+      "saveError"
+    ],
+    "postFields": [
+      "schema",
+      "expected",
+      "settings"
+    ],
+    "settingsFields": [
+      "radioEnabled",
+      "transport",
+      "senders",
+      "powerOnly",
+      "syncOnStart",
+      "directChanges",
+      "retransmissions",
+      "sendGroups",
+      "receiveGroups",
+      "receiveBrightness",
+      "receiveColor",
+      "receiveEffects",
+      "receivePalette",
+      "receiveSegmentOptions",
+      "receiveSegmentBounds",
+      "offlineChannel",
+      "interfaces"
+    ],
+    "maxSenderAddresses": 10,
+    "senderAddressFormat": "unique-nonzero-unicast-lowercase-12-hex",
+    "senderStorage": "nw.linked_remote-shared-with-existing-ESP-NOW-remotes",
+    "powerOnlyStorage": "if.sync.recv.po",
+    "admission": "settings-PIN-then-complete-validation-and-expected-settings-comparison-under-JSON-lock",
+    "acceptedStatus": 202,
+    "persistence": "capacity-checked-temporary-file-then-rename",
+    "verification": "matching-identity-and-settings-with-persisted-true-saveError-false-GET-only",
+    "radioChange": "LAN-stops-radio-immediately-AP-channel-changes-after-durable-save-and-750ms-no-connected-WiFi-restart",
+    "espNow": "same-radio-channel-explicit-sender-and-matching-groups-in-station-or-AP-operation",
+    "powerOnly": "global-on-off-preserves-local-lighting-and-existing-relay-configuration",
+    "receiveOptions": "literal-no-all-off-fallback",
+    "syncOnStart": "saved-send-enable-not-boot-notification",
+    "browser": {
+      "path": "/castletek/v1/settings/sync",
+      "metadata": "/castletek/v1/settings/s.js?p=4",
+      "object": "d.ctSync",
+      "senderCallback": "ctSyncSenders",
+      "replacementMarker": "CTSYNC=3",
+      "fields": [
+        "RE",
+        "CTST",
+        "CTOC",
+        "RPO",
+        "RM0..RM9"
+      ],
+      "legacyOmission": "preserve-transport-radio-power-only-and-sender-list",
+      "oldMarker": "reject-before-mutation",
+      "hiddenSections": [
+        "Alexa Voice Assistant",
+        "Serial"
+      ],
+      "hiddenSendNotifications": [
+        "button-or-IR",
+        "Alexa",
+        "Philips Hue"
+      ],
+      "alexaNotificationSaveBehavior": "preserve-installed-value-ignore-retired-form-field"
+    },
+    "disabledFeatures": [
+      "mqtt",
+      "hue",
+      "dmx"
+    ],
+    "retainedDMXRows": "preserved-without-transmission-excluded-from-new-output-catalog",
+    "retainedRealtime": "DDP-and-ordinary-UDP-realtime",
+    "transport": {
+      "values": [
+        "lan",
+        "espnow"
+      ],
+      "factoryDefault": "lan",
+      "automaticFallback": false,
+      "storage": "if.sync.espnow-false-LAN-true-ESP-NOW",
+      "existingESPSelection": "preserved",
+      "emptySenderList": "reject-all-incoming-controller-sync-on-both-methods",
+      "lanRadio": "forced-off-in-config-native-and-JSON-writes"
+    },
+    "lan": {
+      "headerBytes": 14,
+      "magic": "ca435453",
+      "version": 1,
+      "reservedFlags": 0,
+      "senderIdentity": "station-MAC-at-offset-6-not-authentication",
+      "payloadLength": "big-endian-uint16-at-offset-12",
+      "payload": "bounded-complete-WLED-v12-notification",
+      "legacyType0": "reject",
+      "send": "bounded-snapshot-main-loop-only",
+      "network": "same-LAN-broadcast-no-Internet-required"
+    },
+    "offlineChannel": {
+      "range": [
+        1,
+        11
+      ],
+      "factoryDefault": 1,
+      "storage": "if.sync.offlineChannel",
+      "connectedWiFi": "router-owned-actual-channel",
+      "offline": "hold-AP-channel-after-initial-failed-join-until-explicit-WiFi-recovery",
+      "scan": "explicit-scans-temporarily-interrupt-sync-return-to-AP-home-channel",
+      "autoAlignment": false
+    },
+    "wifiFormOwnership": "Sync-Interfaces-owns-radio-and-senders-WiFi-saves-ignore-RE-RM",
+    "interfaces": {
+      "fields": [
+        "primaryPort",
+        "secondaryPort",
+        "instanceList",
+        "discoverable",
+        "receiveUDP",
+        "mainSegmentOnly",
+        "respectLEDMaps",
+        "timeoutMilliseconds",
+        "forceMaxBrightness",
+        "disableGammaCorrection",
+        "ledOffset"
+      ],
+      "udpPortRange": [
+        1,
+        65535
+      ],
+      "reservedUDPPorts": [
+        67,
+        68,
+        2390,
+        4048,
+        5353,
+        19446
+      ],
+      "distinctUDPPorts": true,
+      "timeoutMilliseconds": {
+        "min": 100,
+        "max": 65000,
+        "step": 100
+      },
+      "ledOffsetRange": [
+        -255,
+        255
+      ],
+      "defaults": "Current controller values; factory defaults remain unchanged.",
+      "apply": "Rebind changed broadcast sockets and clear a disabled instance list on the main loop after durable save. Do not reconnect WiFi."
+    }
+  },
+  "securityBrowserPolicy": {
+    "editable": false,
+    "omittedFormFields": [
+      "PIN",
+      "OW",
+      "NO",
+      "OP",
+      "AO",
+      "SU"
+    ],
+    "saveBehavior": "preserve-installed-security-policy-ignore-retired-fields",
+    "factoryReset": "retained-below-backup-and-restore",
+    "helpButtons": false,
+    "pinInfoPage": false,
+    "existingPINUnlock": "canonical-POST-only"
+  },
+  "timeBrowserPolicy": {
+    "hiddenSections": [
+      "Clock",
+      "Macro Presets"
+    ],
+    "assignmentHeading": "Preset and Macro Assignments",
+    "editableAssignments": [
+      "MN"
+    ],
+    "hiddenAssignmentFields": [
+      "MC",
+      "A0",
+      "A1"
+    ],
+    "saveBehavior": "retain-loaded-clock-countdown-and-Alexa-values-in-complete-form"
+  },
+  "settingsMenuPresentation": {
+    "initialVisibility": "hidden",
+    "revealAfter": [
+      "menu-filtering",
+      "branding-CSS-load",
+      "branding-JavaScript-load"
+    ],
+    "assetFailure": "show-usable-menu-after-both-load-attempts-finish",
+    "navigation": "unchanged-settings-route-no-save-on-back"
+  },
+  "defaultLayoutPolicy": {
+    "schema": 2,
+    "endpoint": "/castletek/v1/json/default-layout",
+    "capability": "castletek.defaultLayout",
+    "savedFields": [
+      "id",
+      "start",
+      "stop",
+      "rev"
+    ],
+    "actions": [
+      "save",
+      "clear",
+      "apply"
+    ],
+    "requestFields": [
+      "schema",
+      "action",
+      "mac",
+      "expectedRevision",
+      "expectedSegments"
+    ],
+    "saveOnce": true,
+    "storage": "/.ct-default-layout.json",
+    "appearance": "Stored reverse direction is restored; all other appearance/options are preserved on existing IDs or inherited from the current main segment for recreated IDs. Legacy saved rev:null preserves current/source reverse.",
+    "clear": "Durable empty record; current lights unchanged.",
+    "apply": "Main-loop transaction, current bounds and reverse compare, enabled-output coverage validation.",
+    "factoryReset": "Filesystem format removes record; config restore and presets do not.",
+    "legacyRecords": "Schema 1 disk records remain readable without rewriting; schema 2 exposes unknown legacy reverse as null. New saves always persist Boolean rev."
+  },
+  "presetNamePolicy": {
+    "schema": 1,
+    "endpoint": "/castletek/v1/json/preset-name",
+    "capability": "castletek.presetNames",
+    "requestFields": [
+      "schema",
+      "mac",
+      "id",
+      "expectedName",
+      "name"
+    ],
+    "presetRange": [
+      1,
+      250
+    ],
+    "maximumNameUTF8Bytes": 32,
+    "mutation": "Read the existing preset under the main-loop JSON lock, compare the expected name, and persist only its new name. Preserve all other stored fields and all live lighting state.",
+    "verification": "GET presets.json; compare the saved record with the original except its name. Never replay an accepted or uncertain POST."
+  }
+}

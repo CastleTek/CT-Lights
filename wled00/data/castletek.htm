@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<meta name="theme-color" content="#000000">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<title>CastleTek Lights</title>
+	<link rel="icon" href="favicon.svg" type="image/svg+xml">
+	<link rel="stylesheet" href="castletek-control.css">
+	<link rel="stylesheet" href="castletek-branding.css" data-inline-ignore>
+</head>
+<body class="ct-app ct-control">
+	<header id="ctHeader" class="ct-header">
+		<div class="ct-header-inner">
+			<div class="ct-header-copy">
+				<div class="ct-header-actions"><button id="refresh" type="button" aria-label="Refresh controller">↻</button></div>
+				<h1 id="ctPageTitle" class="ct-page-title">Home</h1>
+				<p id="ctPageSubtitle" class="ct-page-subtitle">Control your lights</p>
+			</div>
+			<img class="ct-page-logo" src="castletek-logo.png" width="72" height="88" alt="CastleTek Lights" data-inline-ignore>
+		</div>
+	</header>
+	<p id="connection" class="visually-hidden connection-status" role="status" aria-live="polite" aria-atomic="true" data-state="connecting">Connecting to controller</p>
+
+	<main>
+		<section class="hero card">
+			<div class="device-identity">
+				<h1><button id="deviceName" class="device-name" type="button" aria-controls="renameForm" aria-expanded="false" aria-label="Rename controller" disabled>CastleTek Controller</button></h1>
+				<form id="renameForm" class="rename-form" hidden novalidate aria-describedby="renameStatus">
+					<label class="visually-hidden" for="renameName">Controller name</label>
+					<input id="renameName" name="DS" type="text" maxlength="32" autocomplete="off" autocapitalize="words" enterkeyhint="done" spellcheck="false" aria-describedby="renameStatus">
+					<button id="renameSave" class="primary-button compact-button" type="submit">Save</button>
+					<button id="renameCancel" class="secondary-button compact-button" type="button">Cancel</button>
+					<p id="renameStatus" class="rename-status" role="status" aria-live="polite"></p>
+				</form>
+			</div>
+			<button id="power" class="power" type="button" aria-pressed="false" disabled>
+				<span class="power-icon" aria-hidden="true"></span>
+				<span id="powerLabel">Turn on</span>
+			</button>
+			<label class="control-wide" for="brightness">
+				<span>Master brightness</span><output id="brightnessValue">50%</output>
+				<input id="brightness" type="range" min="1" max="255" value="128" disabled>
+			</label>
+		</section>
+
+		<div class="dashboard-grid">
+			<section class="card segments-card" data-ct-page="design" hidden>
+				<div class="section-heading">
+					<div><p class="eyebrow">Targets</p><h2>Segments</h2></div>
+					<div class="heading-actions">
+						<button id="selectAllSegments" class="secondary-button compact-button" type="button" aria-pressed="false" disabled>Select all</button>
+						<button id="addSegment" class="primary-button compact-button" type="button" aria-controls="segmentEditor" aria-expanded="false" disabled>Add segment</button>
+					</div>
+				</div>
+				<p class="control-hint">Choose targets for immediate color and animation changes, or edit their LED ranges below.</p>
+				<div id="segments" class="segment-grid" role="group" aria-label="Command target segments"><p class="empty">Loading segments…</p></div>
+				<p id="targetSummary" class="target-summary" role="status">Waiting for segment information…</p>
+				<p id="segmentAvailability" class="editor-status" role="status" aria-live="polite" hidden></p>
+
+				<div id="segmentEditorHome" class="editor-home" aria-hidden="true"></div>
+				<form id="segmentEditor" class="editor-panel" hidden novalidate aria-labelledby="segmentEditorTitle" aria-describedby="segmentEditorStatus">
+					<div class="editor-heading">
+						<div><p class="eyebrow">Layout</p><h3 id="segmentEditorTitle">Edit segment</h3></div>
+						<button id="cancelSegment" class="icon-button" type="button" aria-label="Close segment editor">×</button>
+					</div>
+					<fieldset id="segmentImmediate" class="live-fieldset">
+						<legend>Immediate segment controls</legend>
+						<div class="toggle-grid">
+							<label class="check-control"><input id="segmentPower" type="checkbox"><span>Segment on</span></label>
+							<label class="check-control"><input id="segmentReverse" type="checkbox"><span>Reverse direction</span></label>
+							<label class="check-control"><input id="segmentMirror" type="checkbox"><span>Mirror effect</span></label>
+						</div>
+						<label for="segmentBrightness"><span>Segment brightness</span><output id="segmentBrightnessValue">100%</output><input id="segmentBrightness" type="range" min="1" max="255" value="255"></label>
+						<p class="control-hint">These controls take effect immediately. Layout fields are saved only with Update Segment.</p>
+					</fieldset>
+					<div id="segmentBatchDrafts" class="segment-batch-drafts" role="group" aria-label="Staged segment layout" hidden></div>
+					<div class="editor-fields">
+						<label class="field-wide" for="segmentName">Name<input id="segmentName" type="text" maxlength="64" autocomplete="off"></label>
+						<label for="segmentStart">Start LED<input id="segmentStart" type="number" min="1" step="1" inputmode="numeric"></label>
+						<label for="segmentEnd">End LED<input id="segmentEnd" type="number" min="1" step="1" inputmode="numeric"></label>
+					</div>
+					<p id="segmentLength" class="editor-summary" role="status" aria-live="polite">Enter a valid LED range.</p>
+					<details class="advanced-panel">
+						<summary>Advanced layout</summary>
+						<div class="editor-fields">
+							<label for="segmentGrouping">Grouping<input id="segmentGrouping" type="number" min="1" max="255" step="1" value="1" inputmode="numeric"></label>
+							<label for="segmentSpacing">Spacing<input id="segmentSpacing" type="number" min="0" max="255" step="1" value="0" inputmode="numeric"></label>
+							<label for="segmentOffset">Offset<input id="segmentOffset" type="number" step="1" value="0" inputmode="numeric"></label>
+						</div>
+					</details>
+					<p id="segmentEditorStatus" class="editor-status" role="status" aria-live="polite"></p>
+					<div class="editor-actions">
+						<button id="saveSegment" class="primary-button" type="submit">Update segment</button>
+						<button id="deleteSegment" class="danger-button" type="button">Delete segment</button>
+						<button class="secondary-button" type="button" data-cancel-segment>Cancel</button>
+					</div>
+				</form>
+				<div class="layout-footer">
+					<p>Segment ranges are runtime state until included in a saved preset.</p>
+					<button id="resetSegments" class="danger-button compact-button" type="button" disabled>Reset layout</button>
+				</div>
+			</section>
+
+			<section class="card color-card" data-ct-page="design" hidden>
+				<div class="section-heading">
+					<div><p class="eyebrow">Color</p><h2 id="colorHeading">Set the mood</h2></div>
+					<button id="colorExpand" class="color-expand" type="button" aria-controls="colorExpandedControls" aria-expanded="false" aria-label="Show color picker controls">
+						<span class="accordion-caret" aria-hidden="true"></span>
+					</button>
+				</div>
+				<div id="colorExpandedControls" class="color-expanded-controls" role="group" aria-labelledby="colorHeading" hidden>
+					<p id="colorHint" class="control-hint">Choose a color slot, then drag to select</p>
+					<div id="colorPicker" class="color-wheel" role="group" aria-label="Circular color picker" aria-disabled="true"><span class="picker-loading">Loading color wheel…</span></div>
+					<div id="colorSliders" class="color-sliders">
+						<label id="colorValueControl" class="color-value" for="colorValue"><span>Color value</span><output id="colorValueValue">100%</output><input id="colorValue" data-segment-control aria-describedby="colorHint targetSummary" type="range" min="0" max="100" step="any" value="100" disabled></label>
+						<label id="colorTemperatureControl" class="color-value" for="colorTemperature" hidden><span>Color temperature</span><output id="colorTemperatureValue">6550 K</output><input id="colorTemperature" data-segment-control aria-describedby="colorHint targetSummary" type="range" min="1900" max="10091" value="6550" disabled></label>
+						<label id="whiteBalanceControl" class="color-value" for="whiteBalance" hidden><span>White balance</span><output id="whiteBalanceValue">127</output><input id="whiteBalance" data-segment-control aria-describedby="colorHint targetSummary" type="range" min="0" max="255" value="127" disabled></label>
+						<label id="whiteChannelControl" class="color-value" for="whiteChannel" hidden><span>White channel</span><output id="whiteChannelValue">0</output><input id="whiteChannel" data-segment-control aria-describedby="colorHint targetSummary" type="range" min="0" max="255" value="0" disabled></label>
+					</div>
+					<div id="colorSlots" class="color-slots" role="group" aria-label="Color selection slots">
+						<button id="colorSlot1" class="color-slot active" type="button" data-color-slot="0" data-segment-control aria-pressed="true" disabled><span id="colorSlot1Swatch" class="color-slot-swatch" aria-hidden="true"></span><span id="colorSlot1Label">Effect</span></button>
+						<button id="colorSlot2" class="color-slot" type="button" data-color-slot="1" data-segment-control aria-pressed="false" hidden disabled><span id="colorSlot2Swatch" class="color-slot-swatch" aria-hidden="true"></span><span id="colorSlot2Label">Background</span></button>
+						<button id="colorSlot3" class="color-slot" type="button" data-color-slot="2" data-segment-control aria-pressed="false" hidden disabled><span id="colorSlot3Swatch" class="color-slot-swatch" aria-hidden="true"></span><span id="colorSlot3Label">Custom</span></button>
+					</div>
+					<label id="colorHexControl" class="hex-control" for="colorHex"><span>Hex color</span><input id="colorHex" type="text" value="#FFB547" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="colorHint targetSummary" disabled></label>
+				</div>
+				<div id="swatches" class="swatches" role="group" aria-label="Quick colors">
+					<button type="button" data-color="#000000" data-segment-control style="--swatch:#000000" aria-label="Black" disabled></button>
+					<button type="button" data-color="#ff3b30" data-segment-control style="--swatch:#ff3b30" aria-label="Red" disabled></button>
+					<button type="button" data-color="#ff9f0a" data-segment-control style="--swatch:#ff9f0a" aria-label="Amber" disabled></button>
+					<button type="button" data-color="#ffd60a" data-segment-control style="--swatch:#ffd60a" aria-label="Gold" disabled></button>
+					<button type="button" data-color="#34c759" data-segment-control style="--swatch:#34c759" aria-label="Green" disabled></button>
+					<button type="button" data-color="#32ade6" data-segment-control style="--swatch:#32ade6" aria-label="Blue" disabled></button>
+					<button type="button" data-color="#bf5af2" data-segment-control style="--swatch:#bf5af2" aria-label="Purple" disabled></button>
+					<button type="button" data-color="#fff4dd" data-segment-control style="--swatch:#fff4dd" aria-label="Warm white" disabled></button>
+				</div>
+			</section>
+
+			<section class="card look-card" data-ct-page="design" hidden>
+				<div class="section-heading"><div><p class="eyebrow">Look</p><h2>Animation</h2></div></div>
+				<label for="effect">Effect<select id="effect" data-segment-control aria-describedby="targetSummary" disabled><option>Loading effects…</option></select></label>
+				<p id="effectCatalogStatus" class="control-hint" role="status" hidden></p>
+				<label for="palette">Palette<select id="palette" data-segment-control aria-describedby="targetSummary" disabled><option>Loading palettes…</option></select></label>
+				<label id="speedControl" for="speed"><span id="speedLabel">Speed</span><output id="speedValue">50%</output><input id="speed" data-segment-control aria-describedby="targetSummary" type="range" min="0" max="255" value="128" disabled></label>
+				<label id="intensityControl" for="intensity"><span id="intensityLabel">Intensity</span><output id="intensityValue">50%</output><input id="intensity" data-segment-control aria-describedby="targetSummary" type="range" min="0" max="255" value="128" disabled></label>
+				<label id="custom1Control" data-effect-control for="custom1" hidden><span id="custom1Label">Custom 1</span><output id="custom1Value">128</output><input id="custom1" data-segment-control aria-describedby="targetSummary" type="range" min="0" max="255" value="128" disabled></label>
+				<label id="custom2Control" data-effect-control for="custom2" hidden><span id="custom2Label">Custom 2</span><output id="custom2Value">128</output><input id="custom2" data-segment-control aria-describedby="targetSummary" type="range" min="0" max="255" value="128" disabled></label>
+				<label id="custom3Control" data-effect-control for="custom3" hidden><span id="custom3Label">Custom 3</span><output id="custom3Value">16</output><input id="custom3" data-segment-control aria-describedby="targetSummary" type="range" min="0" max="31" value="16" disabled></label>
+				<div id="effectOptions" class="effect-options" role="group" aria-label="Effect options" hidden>
+					<p>Effect options</p>
+					<div class="toggle-grid">
+						<label id="option1Control" class="check-control effect-option-control" data-effect-control hidden><input id="option1" data-segment-control aria-describedby="targetSummary" type="checkbox" disabled><span id="option1Label">Check 1</span></label>
+						<label id="option2Control" class="check-control effect-option-control" data-effect-control hidden><input id="option2" data-segment-control aria-describedby="targetSummary" type="checkbox" disabled><span id="option2Label">Check 2</span></label>
+						<label id="option3Control" class="check-control effect-option-control" data-effect-control hidden><input id="option3" data-segment-control aria-describedby="targetSummary" type="checkbox" disabled><span id="option3Label">Check 3</span></label>
+					</div>
+				</div>
+			</section>
+
+			<section class="card presets-card" data-ct-page="home">
+				<div class="section-heading">
+					<div><p class="eyebrow">Scenes</p><h2>Presets</h2></div>
+					<div class="heading-actions">
+						<button id="addPreset" class="primary-button compact-button" type="button" aria-controls="presetEditor" aria-expanded="false" disabled>Save preset</button>
+					</div>
+				</div>
+				<p class="control-hint">Save the current look, including the segment layout when desired. Presets apply as soon as you select them.</p>
+				<p id="presetStatus" class="editor-status preset-operation-status" role="status" aria-live="polite"></p>
+				<div id="presetEditorHome" class="editor-home" aria-hidden="true"></div>
+				<form id="presetEditor" class="editor-panel" hidden novalidate aria-labelledby="presetEditorTitle" aria-describedby="presetEditorStatus">
+					<div class="editor-heading">
+						<div><p class="eyebrow">Current state</p><h3 id="presetEditorTitle">Save preset</h3></div>
+						<button id="cancelPreset" class="icon-button" type="button" aria-label="Close preset editor">×</button>
+					</div>
+					<div class="editor-fields">
+						<label class="field-wide" for="presetName">Name<input id="presetName" type="text" maxlength="32" autocomplete="off"></label>
+						<label for="presetId">Preset ID<input id="presetId" type="number" min="1" max="250" step="1" inputmode="numeric"></label>
+					</div>
+					<div class="toggle-grid preset-options">
+						<label class="check-control"><input id="presetBrightness" type="checkbox" checked><span>Include brightness</span></label>
+						<label class="check-control"><input id="presetBounds" type="checkbox" checked><span>Save segment layout</span></label>
+						<label class="check-control"><input id="presetSelectedOnly" type="checkbox"><span>Selected targets only</span></label>
+						<label class="check-control"><input id="presetStartup" type="checkbox"><span>Use at startup</span></label>
+					</div>
+					<p id="presetSelectionSummary" class="editor-summary">Saves every active segment.</p>
+					<p class="control-hint">“Selected targets only” leaves unselected segments unchanged when recalled. Unchecking “Use at startup” does not clear an existing startup preset.</p>
+					<p id="presetEditorStatus" class="editor-status" role="status" aria-live="polite"></p>
+					<div class="editor-actions">
+						<button id="savePreset" class="primary-button" type="submit">Save preset</button>
+						<button id="deletePreset" class="danger-button" type="button" hidden>Delete preset</button>
+						<button class="secondary-button" type="button" data-cancel-preset>Cancel</button>
+					</div>
+				</form>
+				<div id="presets" class="preset-grid"><p class="empty">Loading presets…</p></div>
+			</section>
+
+			<section class="system-card">
+				<a id="settingsLink" class="secondary-button" href="settings">Controller settings</a>
+				<p class="source-note">CastleTek Lights • EUPL-1.2-or-later</p>
+			</section>
+		</div>
+	</main>
+
+	<div id="toast" class="toast" role="status" aria-live="polite"></div>
+	<noscript><div class="noscript">JavaScript is required for local controller access.</div></noscript>
+	<script src="castletek-branding.js" data-inline-ignore></script>
+	<script src="castletek-control-model.js"></script>
+	<script src="castletek-control.js"></script>
+</body>
+</html>

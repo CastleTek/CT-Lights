@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<meta charset="utf-8">
+	<title>PIN required</title>
+		<script>
+			var d = document;
+			function B() {
+				const ns = "/castletek/v1";
+				const path = window.location.pathname;
+				const authenticated = "/api/castletek/v1";
+				const candidate = path.indexOf(ns);
+				const prefix = candidate >= 0 ? path.slice(0, candidate) : "";
+				const isAuthenticated = path === authenticated || path.startsWith(authenticated + "/") || prefix === "/api" || prefix.endsWith("/api");
+				const end = candidate + ns.length;
+				const i = candidate >= 0 && !isAuthenticated && (end === path.length || path.charAt(end) === "/") ? candidate : -1;
+				window.open(i < 0 ? "../settings" : window.location.pathname.slice(0, i) + ns + "/settings", "_self");
+			}
+		</script>
+	<style>
+		@import url("style.css");
+	</style>
+</head>
+<body onload="d.getElementsByName('PIN')[0].focus()">
+	<form id="form_s" name="Sf" method="post">
+	<div class="sec">
+		<h2>Please enter settings PIN code</h2>
+		<input type="password" name="PIN" size="4" maxlength="4" minlength="4" pattern="[0-9]*" inputmode="numeric" autofocus>
+		<hr>
+		<button type="button" onclick="B()">Back</button><button type="submit">Submit</button>
+	</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,106 @@
+.ct-app {
+	--ct-blue: #2673ff;
+	--ct-background: #000;
+	--ct-card: #1c1c1e;
+	--ct-inset: #28282b;
+	--ct-secondary: #98989f;
+	--ct-border: rgba(255,255,255,.09);
+	--ct-header-height: 108px;
+	box-sizing: border-box;
+	min-height: 100vh;
+	height: auto;
+	max-width: none;
+	margin: 0;
+	padding: 0 0 calc(84px + env(safe-area-inset-bottom, 0px));
+	background: var(--ct-background);
+	color: #f5f5f7;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color-scheme: dark;
+}
+.ct-app *, .ct-app *::before, .ct-app *::after { box-sizing: border-box; }
+.ct-app [hidden] { display: none !important; }
+.ct-app .ct-header {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	width: 100%;
+	background: var(--ct-background);
+	text-align: left;
+}
+.ct-header-inner {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 12px;
+	width: min(960px, calc(100% - 32px));
+	margin: 0 auto;
+	padding: max(8px, env(safe-area-inset-top, 0px)) 0 12px;
+}
+.ct-header-copy { flex: 1; min-width: 0; }
+.ct-app .ct-page-title { margin: 0; color: var(--ct-blue); font-size: 34px; font-weight: 700; line-height: 1.15; letter-spacing: -.035em; white-space: normal; overflow: visible; }
+.ct-app .ct-page-subtitle, .ct-app .ct-page-subtitle h2 { margin: 4px 0 0; color: var(--ct-secondary); font-size: 14px; font-weight: 400; line-height: 1.35; letter-spacing: 0; }
+.ct-app .ct-page-subtitle h2 { margin: 0; }
+.ct-app .ct-page-logo { display: block; flex: 0 0 72px; width: 72px; height: 88px; object-fit: contain; object-position: bottom; }
+.ct-app .ct-header-actions { display: flex; align-items: center; min-height: 28px; margin-bottom: 4px; }
+.ct-app .ct-header-actions:empty { display: none; }
+.ct-app .ct-header-actions button { display: inline-grid; place-items: center; width: auto; height: 28px; min-width: 44px; min-height: 28px; margin: 0; padding: 0 8px 0 0; border: 0; border-radius: 6px; color: var(--ct-blue); background: transparent; font: inherit; font-size: 16px; cursor: pointer; }
+.ct-app .ct-header-actions #refresh { font-size: 26px; }
+.ct-app .ct-tab-bar {
+	position: fixed;
+	inset: auto 0 0;
+	z-index: 30;
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin: 0;
+	padding: 8px 16px max(8px, env(safe-area-inset-bottom, 0px));
+	border-top: 1px solid var(--ct-border);
+	background: rgba(20,20,22,.96);
+	backdrop-filter: blur(16px);
+}
+.ct-app .ct-tab-bar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex: 1; max-width: 200px; min-height: 46px; border-radius: 12px; color: var(--ct-secondary); font-size: 11px; font-weight: 600; line-height: 1.2; text-decoration: none; }
+.ct-app .ct-tab-bar a[aria-current="page"] { color: var(--ct-blue); }
+.ct-tab-bar svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.ct-app :focus-visible { outline: 2px solid var(--ct-blue); outline-offset: 3px; }
+.ct-app .toast, .ct-app #toast { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 40; }
+.ct-control main { width: min(960px, calc(100% - 32px)); margin: 12px auto 24px; }
+.ct-control .card { border-radius: 22px; }
+.ct-control .device-identity h1 { font-size: 26px; line-height: 1.15; letter-spacing: -.025em; }
+.ct-control .eyebrow { display: none; }
+.ct-control .hero, .ct-control .dashboard-grid .card { padding: 20px; }
+.ct-control .hero .power { margin: 0; }
+.ct-control .dashboard-grid { gap: 16px; margin-top: 16px; }
+.ct-control .section-heading { gap: 12px; margin-bottom: 16px; }
+.ct-control .section-heading h2 { font-size: 20px; }
+.ct-control .presets-card { grid-column: 1 / -1; }
+.ct-control .source-note { margin-top: 20px; }
+.ct-settings { text-align: center; overflow-wrap: anywhere; }
+.ct-settings > form, .ct-settings > .ct-settings-menu { width: min(680px, calc(100% - 32px)); margin: 12px auto 24px; }
+.ct-settings .sec { max-width: none; margin: 16px auto; padding: 18px 12px; border: 1px solid var(--ct-border); border-radius: 22px; background: var(--ct-card); }
+.ct-settings h3 { margin: 8px 0 16px; font-size: 20px; line-height: 1.3; }
+.ct-settings h4 { color: #f5f5f7; }
+.ct-settings a { color: var(--ct-blue); }
+.ct-settings button, .ct-settings .btn { border: 1px solid var(--ct-border); border-radius: 12px; background: var(--ct-inset); color: #f5f5f7; font: inherit; min-height: 44px; padding: 8px 14px; }
+.ct-settings button:hover, .ct-settings .btn:hover { background: #343438; }
+.ct-settings input, .ct-settings select { border: 1px solid var(--ct-border); border-radius: 8px; padding: 5px; background: var(--ct-inset); color: #f5f5f7; font-family: inherit; accent-color: var(--ct-blue); }
+.ct-settings input:invalid { color: #ff6961; }
+.ct-settings input:disabled, .ct-settings button:disabled { opacity: .5; }
+.ct-settings input[type="checkbox"] { transform: none; width: 18px; height: 18px; vertical-align: middle; }
+.ct-settings input[type="text"], .ct-settings input[type="password"] { max-width: calc(100% - 8px); }
+.ct-settings select { max-width: 100%; }
+.ct-settings .toprow { top: var(--ct-header-height); z-index: 10; margin: 0 -4px; border-bottom: 1px solid var(--ct-border); background: var(--ct-background); }
+.ct-settings .toprow button { margin: 4px 6px 10px; color: var(--ct-blue); background: transparent; border: 0; }
+.ct-settings .toprow hr { display: none; }
+.ct-settings hr { border: 0; border-top: 1px solid var(--ct-border); }
+.ct-settings-menu { overflow: hidden; border: 1px solid var(--ct-border); border-radius: 22px; background: var(--ct-card); text-align: left; }
+.ct-app .ct-settings-menu button { position: relative; display: block; width: 100%; height: auto; min-height: 56px; margin: 0; padding: 16px 40px 16px 18px; border: 0; border-bottom: 1px solid var(--ct-border); border-radius: 0; color: #f5f5f7; background: transparent; font-size: 16px; text-align: left; }
+.ct-settings-menu button:last-child { border-bottom: 0; }
+.ct-settings-menu button::after { content: "›"; position: absolute; right: 18px; color: var(--ct-secondary); font-size: 24px; line-height: 1; }
+@media (max-width: 420px) {
+	.ct-control .hero, .ct-control .dashboard-grid .card { padding: 16px; }
+	.ct-control .section-heading { flex-wrap: wrap; }
+	.ct-settings .sec { padding: 14px 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .ct-app *, .ct-app *::before, .ct-app *::after { scroll-behavior: auto !important; transition: none !important; } }

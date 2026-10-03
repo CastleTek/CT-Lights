@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<title>WLED Settings</title>
+	<script>
+		// load common.js with retry on error
+		(function loadFiles() {
+			const l = document.createElement('script');
+			l.src = 'common.js';
+			// note: loading style.css here causes ugly white button flashes so @import url("style.css") below inlines it for this page (only costs ~30bytes of flash)
+			l.onload = () => {
+				const initializeSettings = () => {
+					if (isCastleTekWLEDCompat()) {
+						document.title = 'CastleTek Controller Settings';
+						gId('2dbtn')?.remove();
+						gId('uibtn')?.remove();
+						gId('umbtn')?.remove();
+						gId('pinsbtn')?.remove();
+						gId('secbtn').textContent = 'Security & Maintenance';
+						gId('timebtn').textContent = 'Date & Time';
+					}
+					castleTekLoadBranding().then(() => document.documentElement.style.visibility = 'visible');
+					getLoc();
+					loadJS(getURL('/settings/s.js?p=0'), false);
+				};
+				if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeSettings, {once:true});
+				else initializeSettings();
+			};
+			l.onerror = () => setTimeout(loadFiles, 100);
+			document.head.appendChild(l);
+		})();
+	</script>
+	<style>
+		@import url("style.css");
+		body {
+			height: 100px;
+			margin: 0 auto;
+			max-width: 520px;
+		}
+		html {
+			visibility: hidden;
+			background: #000;
+			--h: 9vh;
+		}
+		button {
+			display: block;
+			border-radius: var(--h);
+			font-size: clamp(1rem, 6vw, 2rem);
+			height: var(--h);
+			width: calc(100% - 40px);
+			margin: 2vh auto 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<button type=submit id="b" onclick="window.location=getURL('/')">Back</button>
+<button type="submit" onclick="window.location=getURL('/settings/wifi')">WiFi & Network</button>
+<button type="submit" onclick="window.location=getURL('/settings/leds')">LED & Hardware</button>
+<button id="pinsbtn" type="submit" onclick="window.location=getURL('/settings/pins')">Pin Info</button>
+<button id="2dbtn" type="submit" onclick="window.location=getURL('/settings/2D')">2D Configuration</button>
+<button id="uibtn" type="submit" onclick="window.location=getURL('/settings/ui')">User Interface</button>
+<button id="dmxbtn" style="display:none;" type="submit" onclick="window.location=getURL('/settings/dmx')">DMX Output</button>
+<button type="submit" onclick="window.location=getURL('/settings/sync')">Sync Interfaces</button>
+<button id="timebtn" type="submit" onclick="window.location=getURL('/settings/time')">Time & Macros</button>
+<button id="umbtn" type="submit" onclick="window.location=getURL('/settings/um')">Usermods</button>
+<button id="secbtn" type="submit" onclick="window.location=getURL('/settings/sec')">Security & Updates</button>
+</body>
+</html>

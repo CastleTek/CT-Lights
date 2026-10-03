@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content='width=device-width' name='viewport'>
+		<meta name="theme-color" content="#222222">
+		<title>Not found</title>
+		<style>
+			body {
+				font-family: Verdana, Helvetica, sans-serif;
+				text-align: center;
+				background-color: #222;
+				margin: 0;
+				color: #fff;
+			}
+
+			img {
+				width: 400px;
+				max-width: 50%;
+				image-rendering: pixelated;
+				image-rendering: crisp-edges;
+				margin: 25px 0 -10px 0;
+			}
+		
+			button {
+				outline: none;
+				cursor: pointer;
+				padding: 8px;
+				margin: 10px;
+				width: 230px;
+				text-transform: uppercase;
+				font-family: helvetica;
+				font-size: 19px;
+				background-color: #333;
+				color: white;
+				border: 0px solid white;
+				border-radius: 25px;
+			}
+		</style>
+	</head>
+	<body>
+		<img id="wledMark" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAbUExURQAAAAB81gCU/zKq/////9bW1oCAgGhoaAAAAGPLX8AAAAAJdFJOU///////////AFNPeBIAAAAJcEhZcwAADsAAAA7AAWrWiQkAAACdSURBVDhPxc9bDoUgEANQebP/FUuHMjBGY/B+3EYR7RH0qC/ZBc6HwCljgHO+xZIVSI2sYgHaG7EBWh8jWoxTrCBFdDJ+BD4lbIHxAcz8APAVLTsrZE4eQD5qzt3cAFTYokC4YCN9Gybgu4yAQtBFLQXHuHABA7JMeOEC/E0W5uy9gv4vo5QHK2i7yq2C8UABM4HmL+CSTXCTF1DrCX6+Gp9zB5dsAAAAAElFTkSuQmCC">
+		<svg id="castleTekMark" aria-label="CastleTek" role="img" viewBox="0 0 64 64" style="display:none;width:96px;margin-top:28px"><rect width="64" height="64" rx="14" fill="#101827"/><path d="M12 49V27h8v-8h8v8h8v-8h8v8h8v22H38V38H26v11z" fill="#ffb547"/><path d="M8 52h48v4H8z" fill="#59d8ff"/></svg>
+		<h1>404 Not Found</h1>
+		<b id="notFoundMessage">Akemi does not know where you are headed...</b><br><br>
+		<button onclick="RP()">Back to controls</button>
+		<script>
+				const ns = "/castletek/v1";
+				const path = window.location.pathname;
+				const authenticated = "/api/castletek/v1";
+				const candidateIndex = path.indexOf(ns);
+				const prefix = candidateIndex >= 0 ? path.slice(0, candidateIndex) : "";
+				const isAuthenticated = path === authenticated || path.startsWith(authenticated + "/") || prefix === "/api" || prefix.endsWith("/api");
+				const nsEnd = candidateIndex + ns.length;
+				const nsIndex = candidateIndex >= 0 && !isAuthenticated && (nsEnd === path.length || path.charAt(nsEnd) === "/") ? candidateIndex : -1;
+			if (nsIndex >= 0) {
+				document.getElementById("wledMark").style.display = "none";
+				document.getElementById("castleTekMark").style.display = "inline-block";
+				document.getElementById("notFoundMessage").textContent = "That CastleTek controller route does not exist.";
+			}
+			function RP() {
+				window.location.href = nsIndex < 0 ? "../?sliders" : window.location.pathname.slice(0, nsIndex) + ns + "/";
+			}
+		</script>
+	</body>
+</html>

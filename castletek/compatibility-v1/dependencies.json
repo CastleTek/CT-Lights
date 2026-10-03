@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "environment": "castletek_compat_digquad_v2_v3_wifi",
+  "node": "22.23.1",
+  "python": "3.11",
+  "platformio": "6.2.0",
+  "platform": "https://github.com/tasmota/platform-espressif32/releases/download/2024.06.00/platform-espressif32.zip",
+  "framework": "https://github.com/tasmota/arduino-esp32/releases/download/2.0.18/framework-arduinoespressif32.zip",
+  "toolchain": "espressif/toolchain-xtensa-esp32@8.4.0+2021r2-patch5",
+  "esptool": "https://github.com/tasmota/esptool/releases/download/v4.7.4/esptool.zip",
+  "libraries": {
+    "AsyncTCP": "3.4.7",
+    "AnimatedGIF": "1.4.7",
+    "GifDecoder": "bc3af189b6b1e06946569f6b4287f0b79a860f8e",
+    "esp_dmx": "47db25d8c515e76fabcf5fc5ab0b786f98eeade0",
+    "IRremoteESP8266": "2.8.2",
+    "NeoPixelBus": "a0919d1c10696614625978dd6fb750a1317a14ce",
+    "ESPAsyncWebServerWLED": "39b830c852054444ea12a8b5d7fcb4fa004a89d7",
+    "AsyncMqttClient": "0.9.0",
+    "QuickEspNow": "193e991642cbffe1d44e7445a0a34445f69a67d8",
+    "arduinoFFT": "2.0.1"
+  }
+}
